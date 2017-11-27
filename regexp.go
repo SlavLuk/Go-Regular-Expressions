@@ -3,10 +3,17 @@ package main
 import (
 	"fmt"
 	"math/rand"
+	"regexp"
 	"time"
 )
 
 func elizaResponse(input string) string {
+
+	re := regexp.MustCompile(`(?i)\bfather.*`)
+
+	if matched := re.MatchString(input); matched {
+		return "Why don’t you tell me more about your father?"
+	}
 
 	responses := []string{"I’m not sure what you’re trying to say. Could you explain it to me?", "How does that make you feel?", "Why do you say that?"}
 
