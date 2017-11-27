@@ -10,7 +10,7 @@ import (
 func elizaResponse(input string) string {
 
 	re := regexp.MustCompile(`(?i).*\bfather.*`)
-	reg := regexp.MustCompile(`(?i)I am ([^.?!]*)[.?!]?`)
+	reg := regexp.MustCompile(`(?i)(i\s?[am']?m)\s?([^.?!]*)[.?!]?`)
 
 	if matched := re.MatchString(input); matched {
 
@@ -18,7 +18,7 @@ func elizaResponse(input string) string {
 
 	} else if matched := reg.MatchString(input); matched {
 
-		replace := reg.ReplaceAllString(input, "How do you know you are $1?")
+		replace := reg.ReplaceAllString(input, "How do you know you are $2?")
 
 		return replace
 	}
@@ -55,4 +55,9 @@ func main() {
 	fmt.Println("I am supposed to just take what you’re saying at face value?")
 	fmt.Println(elizaResponse("I am supposed to just take what you’re saying at face value?"))
 
+	fmt.Println("------------------------------------------------")
+	fmt.Println("I'm so happy")
+	fmt.Println(elizaResponse("I'm so happy"))
+	fmt.Println("Im so happy")
+	fmt.Println(elizaResponse("Im so happy"))
 }
