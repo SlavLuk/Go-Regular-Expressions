@@ -30,13 +30,44 @@ func elizaResponse(input string) string {
 
 	re := regexp.MustCompile(`(?i).*\bfather.*`)
 	reg := regexp.MustCompile(`(?i)(i\s?[am']?m)\s?([^.?!]*)[.?!]?`)
+	rHello := regexp.MustCompile(`(?im)^hello my name is (.*)`)
+	qReg := regexp.MustCompile(`(?im)^are you ([^\?]*)\??`)
+	hReg := regexp.MustCompile(`(?im)i have (.*)`)
 
+	//if matched to (?im)i have (.*)
+	if matched := hReg.MatchString(input); matched {
+
+		responses := []string{"Why do you tell me that you've $1?",
+			"Have you really $1?",
+			"Now that you have $1, what will you do next?"}
+
+		return hReg.ReplaceAllString(input, responses[rand.Intn(len(responses))])
+	}
+
+	//if matched to (?im)^are you ([^\?]*)\??
+	if matched := qReg.MatchString(input); matched {
+
+		responses := []string{"Why does it matter whether I am $1?",
+			"Would you prefer it if I were not $1?",
+			"Perhaps you believe I am $1.",
+			"I may be $1-- what do you think?"}
+
+		return qReg.ReplaceAllString(input, responses[rand.Intn(len(responses))])
+	}
+	//if matched to (?im)^hello my name is (.*)
+	if matched := rHello.MatchString(input); matched {
+
+		converted := rHello.ReplaceAllString(input, "Hello $1 , How are you today!")
+
+		return converted
+	}
+	//if matched to (?i).*\bfather.*
 	if matched := re.MatchString(input); matched {
 
 		return "Why don’t you tell me more about your father?"
 
 	}
-
+	//if matched to (?i)(i\s?[am']?m)\s?([^.?!]*)[.?!]?
 	if matched := reg.MatchString(input); matched {
 
 		converted := reg.ReplaceAllString(input, "$2")
@@ -75,7 +106,7 @@ func elizaResponse(input string) string {
 func main() {
 
 	// Seed the rand package with the current time.
-	rand.New(rand.NewSource(time.Now().UnixNano()))
+	rand.Seed(time.Now().UTC().UnixNano())
 
 	//print outputs
 	fmt.Println("People say I look like both my mother and father.")
@@ -110,5 +141,12 @@ func main() {
 	fmt.Println("------------------------------------------------")
 	fmt.Println("I am not sure that you understand the effect your questions are having on me.")
 	fmt.Println(elizaResponse("I am not sure that you understand the effect your questions are having on me."))
+	fmt.Println("------------------------------------------------")
+	fmt.Println("Hello my name is John")
+	fmt.Println(elizaResponse("Hello my name is John"))
+	fmt.Println("Are you a computer")
+	fmt.Println(elizaResponse("Are you a computer"))
+	fmt.Println("I have a nice car")
+	fmt.Println(elizaResponse("I have a nice car"))
 
 }
